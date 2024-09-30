@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import SweetAlert from "sweetalert2"; 
-import FileDropZone from "./FileDropZone";
-import { submitCarDetails } from "../submissions/submitForm"; 
-import { validationSchema } from "../validations/validationSchema"; 
+import FileDropZone from "./fileDropZone";
+import { validationSchema } from "../utils/validationSchema"; 
 import { Box, Button, TextField, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Divider } from "@mui/material";
 import { FaCar, FaSignOutAlt } from "react-icons/fa"; // Import car and logout icons
+import apiRequest from "../utils/api";
 
 const CarForm = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -31,7 +31,23 @@ const CarForm = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      if (await submitCarDetails(values, uploadedFiles)) {
+
+      const formData = new FormData();
+      // Append form values to FormData
+      formData.append('name', values.carName);
+      formData.append('model', values.carModel);
+      formData.append('price', values.price); // Ensure you have this value in your form
+      formData.append('phone', values.phoneNumber);
+      formData.append('city', values.city);
+      
+      // Append files to FormData
+      uploadedFiles.forEach((file) => {
+        formData.append('images', file);
+      });
+
+      const token = window.localStorage.getItem('idToken'); // Adjust the key as necessary
+
+      if(await apiRequest('/car-details', 'POST', formData, token)){
         // Reset form fields
         formik.resetForm();
         setUploadedFiles([]);

@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
-import { signInUser } from '../submissions/authSubmission'; 
 import { Container, Typography, Paper, TextField, Button, Box } from '@mui/material';
+import apiRequest from '../utils/api';
 
 const SignIn = () => {
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const SignIn = () => {
     }),
     onSubmit: async (values) => {
       // Call the submission logic
-      const result = await signInUser(values.email, values.password);
+      const result = await apiRequest('/sign-in', 'POST', { email:values.email, password: values.password });
       console.log(`result--`, result)
 
       if (result.success) {

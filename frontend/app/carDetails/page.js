@@ -1,4 +1,4 @@
-import CarForm from "../components/CarForm";
+import CarForm from "../components/carForm";
 
 const CarDetails = () => {
     return (
