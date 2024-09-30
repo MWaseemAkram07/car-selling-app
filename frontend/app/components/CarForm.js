@@ -31,7 +31,6 @@ const CarForm = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-
       const formData = new FormData();
       // Append form values to FormData
       formData.append('name', values.carName);
@@ -46,7 +45,6 @@ const CarForm = () => {
       });
 
       const token = window.localStorage.getItem('idToken'); // Adjust the key as necessary
-
       if(await apiRequest('/car-details', 'POST', formData, token)){
         // Reset form fields
         formik.resetForm();
